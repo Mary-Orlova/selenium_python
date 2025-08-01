@@ -31,7 +31,6 @@ try:
     # В метод execute_script передали текст js-скрипта и найденный элемент button,
     # к которому нужно будет проскроллить страницу.
     # После выполнения кода элемент button должен оказаться в верхней части страницы.
-    # button = browser.find_element(By.TAG_NAME, "button")
     browser.execute_script("return arguments[0].scrollIntoView(true);", button)
 
     # Выбор в радио-баттен Robots rule
