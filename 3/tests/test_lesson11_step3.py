@@ -3,13 +3,14 @@ from selenium.webdriver.common.by import By
 import unittest
 import time
 
-class TestRegistration1(unittest.TestCase):
+class TestRegistration(unittest.TestCase):
     def setUp(self):
-        # Инициализация браузера
+        # Инициализация браузера перед каждым тестом
         self.browser = webdriver.Chrome()
 
-    def test_registration1(self):
-        self.browser.get("http://suninjuly.github.io/registration1.html")
+    def fill_form_and_submit(self, link):
+        # Открываем указанную страницу с формой регистрации
+        self.browser.get(link)
 
         input1 = self.browser.find_element(By.CSS_SELECTOR, ".first_block .first")
         input1.send_keys("Ivan")  # Ввод имени
@@ -18,60 +19,34 @@ class TestRegistration1(unittest.TestCase):
         input3 = self.browser.find_element(By.CSS_SELECTOR, ".first_block .third")
         input3.send_keys("test@ya.ru")  # Ввод email
 
-        # Нажатие кнопки отправки формы
+        # Нажимаем кнопку отправки формы
         button = self.browser.find_element(By.CSS_SELECTOR, "button.btn")
         button.click()
 
-        # Ожидание загрузки страницы с результатом
+        # Ждем загрузки страницы с результатом
         time.sleep(1)
 
-        # Нахождение элемента с текстом подтверждения регистрации
+        # Возвращаем текст подтверждения регистрации
         welcome_text_elt = self.browser.find_element(By.TAG_NAME, "h1")
-        welcome_text = welcome_text_elt.text
+        return welcome_text_elt.text
 
-        # Проверка -  текст подтверждения соответствует ожидаемому
+    def test_registration1(self):
+        # Тест для первой версии формы регистрации
+        welcome_text = self.fill_form_and_submit("http://suninjuly.github.io/registration1.html")
         self.assertEqual("Congratulations! You have successfully registered!", welcome_text)
-
-    def tearDown(self):
-        # Ожидание пару секунд, чтобы можно было визуально оценить результат
-        time.sleep(2)
-        # Закрытие браузера
-        self.browser.quit()
-
-
-class TestRegistration2(unittest.TestCase):
-    def setUp(self):
-        # Инициализация браузера
-        self.browser = webdriver.Chrome()
 
     def test_registration2(self):
-        self.browser.get("http://suninjuly.github.io/registration2.html")
-
-        input1 = self.browser.find_element(By.CSS_SELECTOR, ".first_class .first")
-        input1.send_keys("Ivan")  # Ввод имени
-        input2 = self.browser.find_element(By.CSS_SELECTOR, ".third_class .third")
-        input2.send_keys("test@ya.ru")  # Ввод email
-
-        # Нажатие кнопки отправки формы
-        button = self.browser.find_element(By.CSS_SELECTOR, "button.btn")
-        button.click()
-
-        # Ожидание загрузки страницы с результатом
-        time.sleep(1)
-
-        # Нахождение элемента с текстом подтверждения регистрации
-        welcome_text_elt = self.browser.find_element(By.TAG_NAME, "h1")
-        welcome_text = welcome_text_elt.text
-
-        # Проверка - текст подтверждения соответствует ожидаемому
+        # Тест для второй версии формы регистрации
+        welcome_text = self.fill_form_and_submit("http://suninjuly.github.io/registration2.html")
         self.assertEqual("Congratulations! You have successfully registered!", welcome_text)
 
     def tearDown(self):
-        # Ожидание пару секунд, чтобы можно было визуально оценить результат
+        # Ждем пару секунд, чтобы можно было визуально оценить результат
         time.sleep(2)
-        # Закрытие браузера
+        # Закрываем браузер после каждого теста
         self.browser.quit()
 
 
 if __name__ == "__main__":
+    # Запуск всех тестов
     unittest.main()
