@@ -6,3 +6,6 @@ class BasePage():
 
     def open(self):
         self.browser.get(self.url)
+
+    def find_element(self, *args):
+        return self.browser.find_element(*args)
